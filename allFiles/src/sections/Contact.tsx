@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, Send, Instagram, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useParallax } from '@/hooks/useParallax';
 
 const contactInfo = [
   {
@@ -34,6 +35,7 @@ const socialLinks = [
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const { ref: parallaxRef, y: parallaxY } = useParallax(-0.15);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,12 +55,15 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative py-20 bg-white dark:bg-black overflow-hidden"
+      ref={(el) => { (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el; }}
+      className="relative py-20 bg-[#080d1a] dark:bg-black overflow-hidden"
     >
-      {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-400/8 dark:bg-purple-600/10 rounded-full blur-[150px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-400/8 dark:bg-cyan-600/10 rounded-full blur-[150px]" />
+      {/* Background effects — parallax layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-400/8 dark:bg-purple-600/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-400/8 dark:bg-cyan-600/10 rounded-full blur-[150px]" />
+        </motion.div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,7 +76,7 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-indigo-950 dark:text-white">Get In </span>
+            <span className="text-white dark:text-white">Get In </span>
             <span className="gradient-text">Touch</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mb-6" />
@@ -127,7 +132,7 @@ export default function Contact() {
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
                   rows={5}
-                  className="bg-purple-50/60 dark:bg-gray-900/50 border-purple-200 dark:border-white/10 text-indigo-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-purple-500 focus:ring-purple-500/20 rounded-xl resize-none"
+                  className="bg-white/5 dark:bg-gray-900/50 border-purple-500/30 dark:border-white/10 text-white dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:border-purple-500 focus:ring-purple-500/20 rounded-xl resize-none"
                 />
               </div>
 
@@ -180,14 +185,14 @@ export default function Contact() {
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                   whileHover={{ scale: 1.02, x: 5 }}
-                  className="flex items-center gap-4 p-4 bg-purple-50 dark:bg-gray-900/50 border border-purple-100 dark:border-white/5 rounded-xl hover:border-purple-400/50 dark:hover:border-purple-500/30 transition-all group shadow-sm dark:shadow-none"
+                  className="flex items-center gap-4 p-4 bg-white/5 dark:bg-gray-900/50 border border-purple-500/20 dark:border-white/5 rounded-xl hover:border-purple-400/50 dark:hover:border-purple-500/30 transition-all group shadow-lg dark:shadow-none"
                 >
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:shadow-purple-500/30 transition-shadow">
                     <info.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">{info.label}</p>
-                    <p className="text-indigo-900 dark:text-white font-medium group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    <p className="text-gray-200 dark:text-white font-medium group-hover:text-purple-400 dark:group-hover:text-purple-400 transition-colors">
                       {info.value}
                     </p>
                   </div>

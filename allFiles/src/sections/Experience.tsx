@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { useParallax } from '@/hooks/useParallax';
 
 const educationData = [
     {
@@ -81,14 +82,25 @@ function EducationCard({
     const isLeft = item.side === 'left';
 
     const CardContent = () => (
-        <div className="group relative bg-white dark:bg-gray-900/60 border border-purple-100 dark:border-white/8 rounded-2xl p-6 hover:border-purple-400/50 dark:hover:border-purple-500/40 hover:bg-purple-50/40 dark:hover:bg-gray-800/60 transition-all duration-300 shadow-sm dark:shadow-xl">
+        <motion.div
+            whileHover={{
+                scale: 1.02,
+                rotateX: -3,
+                rotateY: isLeft ? 4 : -4,
+                y: -6,
+                transition: { type: 'spring', stiffness: 280, damping: 22 },
+            }}
+            style={{ transformStyle: 'preserve-3d' }}
+            className="group relative bg-[#0e1628]/90 dark:bg-gray-900/60 border border-purple-500/20 dark:border-white/8 rounded-2xl p-6 hover:border-purple-400/50 dark:hover:border-purple-500/40 hover:bg-purple-500/10 dark:hover:bg-gray-800/60 transition-all duration-300 shadow-lg dark:shadow-xl"
+        >
             {/* Glow */}
             <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-purple-500/5 to-pink-500/5 pointer-events-none" />
+            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(168,85,247,0.15), 0 0 60px rgba(236,72,153,0.08)' }} />
 
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                    <h3 className="text-indigo-950 dark:text-white font-bold text-lg leading-snug">{item.degree}</h3>
+                    <h3 className="text-white dark:text-white font-bold text-lg leading-snug">{item.degree}</h3>
                     <p className="text-purple-600 dark:text-purple-400 text-sm font-medium mt-0.5">{item.institution}</p>
                 </div>
                 <div className="ml-3 w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg">
@@ -106,14 +118,14 @@ function EducationCard({
                 </span>
             </div>
 
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">{item.description}</p>
+            <p className="text-gray-300 dark:text-gray-300 text-sm mb-3">{item.description}</p>
 
             {/* Achievements */}
             <div>
-                <p className="text-indigo-900 dark:text-white text-xs font-semibold mb-2">Key Achievements:</p>
+                <p className="text-purple-300 dark:text-white text-xs font-semibold mb-2">Key Achievements:</p>
                 <ul className="space-y-1">
                     {item.achievements.map((ach) => (
-                        <li key={ach} className="flex items-start gap-2 text-gray-500 dark:text-gray-400 text-xs">
+                        <li key={ach} className="flex items-start gap-2 text-gray-400 dark:text-gray-400 text-xs">
                             <span className="mt-1 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
                             {ach}
                         </li>
@@ -127,7 +139,7 @@ function EducationCard({
                     {item.type}
                 </span>
             </div>
-        </div>
+        </motion.div>
     );
 
     return (
@@ -175,13 +187,22 @@ function EducationCard({
 export default function Experience() {
     const headerRef = useRef(null);
     const isHeaderInView = useInView(headerRef, { once: true, margin: '-50px' });
+    const { ref: parallaxRef, y: parallaxY } = useParallax(-0.15);
 
     return (
-        <section id="experience" className="relative py-20 bg-[#f8f5ff] dark:bg-black overflow-hidden">
-            {/* Background glow */}
+        <section
+            id="experience"
+            ref={(el) => {
+                (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el;
+            }}
+            className="relative py-20 bg-[#080d1a] dark:bg-black overflow-hidden"
+        >
+            {/* Background glow — parallax layer */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-400/8 dark:bg-purple-600/5 rounded-full blur-[180px]" />
-                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-pink-400/6 dark:bg-pink-600/4 rounded-full blur-[120px]" />
+                <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+                    <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-400/8 dark:bg-purple-600/5 rounded-full blur-[180px]" />
+                    <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-pink-400/6 dark:bg-pink-600/4 rounded-full blur-[120px]" />
+                </motion.div>
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -194,7 +215,7 @@ export default function Experience() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                        <span className="text-indigo-950 dark:text-white">My </span>
+                        <span className="text-white dark:text-white">My </span>
                         <span className="gradient-text">Education</span>
                     </h2>
                     <p className="text-gray-500 dark:text-gray-400 text-sm md:text-base max-w-xl mx-auto mt-3">

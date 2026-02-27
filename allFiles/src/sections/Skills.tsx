@@ -13,6 +13,7 @@ import {
   GitBranch,
   Github,
 } from 'lucide-react';
+import { useParallax } from '@/hooks/useParallax';
 
 const skills = [
   { name: 'HTML5/CSS3', icon: FileCode, percentage: 95 },
@@ -32,12 +33,22 @@ const skills = [
 export default function Skills() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const { ref: parallaxRef, y: parallaxY } = useParallax(-0.2);
 
   return (
-    <section id="skills" className="relative py-20 bg-[#f8f5ff] dark:bg-black overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/8 dark:bg-purple-600/5 rounded-full blur-[150px]" />
+    <section
+      id="skills"
+      ref={(el) => {
+        (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative py-20 bg-[#080d1a] dark:bg-black overflow-hidden"
+    >
+      {/* Background effects — parallax layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/8 dark:bg-purple-600/5 rounded-full blur-[150px]" />
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-pink-400/5 dark:bg-pink-600/5 rounded-full blur-[120px]" />
+        </motion.div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,7 +61,7 @@ export default function Skills() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-indigo-950 dark:text-white">My </span>
+            <span className="text-white dark:text-white">My </span>
             <span className="gradient-text">Skills</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full" />
@@ -65,13 +76,16 @@ export default function Skills() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.08 }}
               whileHover={{
-                scale: 1.05,
-                y: -5,
-                transition: { duration: 0.2 },
+                scale: 1.07,
+                y: -8,
+                rotateX: -6,
+                rotateY: 6,
+                transition: { duration: 0.25, type: 'spring', stiffness: 300 },
               }}
+              style={{ transformStyle: 'preserve-3d' }}
               className="group relative"
             >
-              <div className="relative bg-white dark:bg-gray-900/50 border border-purple-100 dark:border-white/5 rounded-xl p-4 md:p-6 overflow-hidden transition-all duration-300 group-hover:border-purple-400/40 dark:group-hover:border-purple-500/30 group-hover:bg-purple-50/50 dark:group-hover:bg-gray-800/50 shadow-sm dark:shadow-none">
+              <div className="relative bg-[#0e1628]/80 dark:bg-gray-900/50 border border-purple-500/20 dark:border-white/5 rounded-xl p-4 md:p-6 overflow-hidden transition-all duration-300 group-hover:border-purple-400/50 dark:group-hover:border-purple-500/30 group-hover:bg-purple-500/10 dark:group-hover:bg-gray-800/50 shadow-lg">
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10" />
@@ -90,12 +104,12 @@ export default function Skills() {
                   </motion.div>
 
                   {/* Skill name */}
-                  <h3 className="text-center text-sm md:text-base font-medium text-indigo-950 dark:text-white mb-3">
+                  <h3 className="text-center text-sm md:text-base font-medium text-white dark:text-white mb-3">
                     {skill.name}
                   </h3>
 
                   {/* Progress bar */}
-                  <div className="relative h-1.5 bg-purple-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="relative h-1.5 bg-white/10 dark:bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={isInView ? { width: `${skill.percentage}%` } : {}}

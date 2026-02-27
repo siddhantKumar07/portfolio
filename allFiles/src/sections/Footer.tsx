@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useParallax } from '@/hooks/useParallax';
 import { ArrowUp, Instagram, Twitter } from 'lucide-react';
 
 const quickLinks = [
@@ -14,6 +15,7 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { ref: parallaxRef, y: parallaxY } = useParallax(-0.1);
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -26,10 +28,15 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#f8f5ff] dark:bg-black border-t border-purple-100 dark:border-white/5 overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-400/5 dark:bg-purple-600/5 rounded-full blur-[150px]" />
+    <footer
+      ref={(el) => { (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el; }}
+      className="relative bg-[#080d1a] dark:bg-black border-t border-purple-500/20 dark:border-white/5 overflow-hidden"
+    >
+      {/* Background effects — parallax layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-400/5 dark:bg-purple-600/5 rounded-full blur-[150px]" />
+        </motion.div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -42,7 +49,7 @@ export default function Footer() {
             transition={{ duration: 0.5 }}
           >
             <a href="#home" className="text-2xl font-bold mb-4 inline-block">
-              <span className="text-indigo-950 dark:text-white">Port</span>
+              <span className="text-white dark:text-white">Port</span>
               <span className="gradient-text">folio</span>
             </a>
             <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-6 max-w-xs">
@@ -82,7 +89,7 @@ export default function Footer() {
                       e.preventDefault();
                       scrollToSection(link.href);
                     }}
-                    className="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm"
+                    className="text-gray-400 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-400 transition-colors text-sm"
                   >
                     {link.name}
                   </a>
@@ -124,7 +131,7 @@ export default function Footer() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12 pt-8 border-t border-purple-100 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
-          <p className="text-gray-400 dark:text-gray-500 text-sm">
+          <p className="text-gray-500 dark:text-gray-500 text-sm">
             © 2025 Siddhant kumar. All rights reserved.
           </p>
 

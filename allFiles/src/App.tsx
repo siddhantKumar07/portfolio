@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingScreen from './components/LoadingScreen';
+import CustomCursor from './components/CustomCursor';
 import Navigation from './components/Navigation';
 import AIChat from './components/AIChat';
 import Hero from './sections/Hero';
@@ -30,7 +31,8 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="bg-[#f8f5ff] dark:bg-black min-h-screen transition-colors duration-300">
+      <div className="bg-[#080d1a] dark:bg-black min-h-screen transition-colors duration-300" style={{ cursor: 'none' }}>
+        <CustomCursor />
         {/* Loading Screen */}
         <AnimatePresence mode="wait">
           {isLoading && (

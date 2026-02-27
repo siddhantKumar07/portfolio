@@ -1,8 +1,32 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { Download, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useParallax } from '@/hooks/useParallax';
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { ref: parallaxRef, y: parallaxY } = useParallax(-0.15);
+
+  // Mouse-based 3D tilt for the avatar
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 120, damping: 20 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 120, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -13,22 +37,34 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#f8f5ff] dark:bg-black"
+      ref={(el) => {
+        sectionRef.current = el;
+        (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#080d1a] dark:bg-black"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      {/* Background effects */}
+      {/* Background effects — parallax layer */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-400/10 dark:bg-pink-600/10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-400/5 dark:bg-cyan-600/5 rounded-full blur-[150px]" />
+        <motion.div
+          style={{ y: parallaxY }}
+          className="absolute inset-0"
+        >
+          {/* Gradient orbs */}
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-400/10 dark:bg-pink-600/10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-400/5 dark:bg-cyan-600/5 rounded-full blur-[150px]" />
+        </motion.div>
 
-        {/* Grid pattern */}
+        {/* Grid pattern (static) */}
         <div
           className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]"
           style={{
             backgroundImage: `linear-gradient(rgba(109,40,217,0.3) 1px, transparent 1px),
                               linear-gradient(90deg, rgba(109,40,217,0.3) 1px, transparent 1px)`,
             backgroundSize: '50px 50px',
+            opacity: 0.06,
           }}
         />
       </div>
@@ -45,7 +81,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-4"
             >
-              <span className="text-gray-500 dark:text-gray-400 text-lg">Hi, I'm</span>
+              <span className="text-white">Hi, I'm</span>
             </motion.div>
 
             {/* Main heading */}
@@ -57,7 +93,7 @@ export default function Hero() {
             >
               <span className="gradient-text">siddhant kumar</span>
               <br />
-              <span className="text-indigo-950 dark:text-white">Full Stack </span>
+              <span className="text-white">Full Stack </span>
               <span className="gradient-text">Developer</span>
             </motion.h1>
 
@@ -66,7 +102,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-gray-500 dark:text-gray-400 text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-8"
+              className="text-gray-300 dark:text-gray-400 text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-8"
             >
               Full Stack Developer crafting modern, responsive web apps with clean UI
               and robust backend architecture.
@@ -90,7 +126,7 @@ export default function Hero() {
               <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
-                  className="border-purple-300 dark:border-white/20 bg-white/60 dark:bg-white/5 hover:bg-purple-50 dark:hover:bg-white/10 text-indigo-900 dark:text-white px-8 py-6 rounded-full font-medium text-base backdrop-blur-sm group"
+                  className="border-purple-500/40 dark:border-white/20 bg-white/5 dark:bg-white/5 hover:bg-purple-500/10 dark:hover:bg-white/10 text-white dark:text-white px-8 py-6 rounded-full font-medium text-base backdrop-blur-sm group"
                 >
                   <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                   Download CV
@@ -99,7 +135,7 @@ export default function Hero() {
 
               <button
                 onClick={() => scrollToSection('#projects')}
-                className="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white flex items-center gap-2 transition-colors group"
+                className="text-gray-400 dark:text-gray-400 hover:text-purple-400 dark:hover:text-white flex items-center gap-2 transition-colors group"
               >
                 <span>View My Work</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -107,7 +143,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right content - 3D Character */}
+          {/* Right content - 3D Character with mouse tilt */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -118,10 +154,11 @@ export default function Hero() {
               {/* Glow ring */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30 blur-3xl animate-pulse" />
 
-              {/* Character container */}
+              {/* Character container with 3D tilt */}
               <motion.div
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
                 className="relative w-full h-full"
               >
                 {/* 3D Character SVG */}

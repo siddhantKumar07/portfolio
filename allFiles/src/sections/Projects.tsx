@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { useParallax } from '@/hooks/useParallax';
 
 const projects = [
   {
@@ -38,16 +39,22 @@ const projects = [
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const { ref: parallaxRef, y: parallaxY } = useParallax(-0.18);
 
   return (
     <section
       id="projects"
-      className="relative py-20 bg-white dark:bg-black overflow-hidden"
+      ref={(el) => {
+        (parallaxRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative py-20 bg-[#080d1a] dark:bg-black overflow-hidden"
     >
-      {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-400/8 dark:bg-purple-600/10 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-400/8 dark:bg-pink-600/10 rounded-full blur-[150px]" />
+      {/* Background effects — parallax layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-400/8 dark:bg-purple-600/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-400/8 dark:bg-pink-600/10 rounded-full blur-[150px]" />
+        </motion.div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +67,7 @@ export default function Projects() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-indigo-950 dark:text-white">Featured </span>
+            <span className="text-white dark:text-white">Featured </span>
             <span className="gradient-text">Projects</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mb-6" />
@@ -79,9 +86,17 @@ export default function Projects() {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}
+              whileHover={{
+                scale: 1.04,
+                y: -10,
+                rotateX: -4,
+                rotateY: index === 0 ? 4 : index === 1 ? 0 : -4,
+                transition: { type: 'spring', stiffness: 260, damping: 20 },
+              }}
+              style={{ transformStyle: 'preserve-3d' }}
               className="group relative"
             >
-              <div className="relative bg-white dark:bg-gray-900/50 border border-purple-100 dark:border-white/5 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-purple-400/40 dark:group-hover:border-purple-500/30 h-full shadow-sm dark:shadow-none">
+              <div className="relative bg-[#0e1628]/90 dark:bg-gray-900/50 border border-purple-500/20 dark:border-white/5 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-purple-400/50 dark:group-hover:border-purple-500/30 h-full shadow-lg group-hover:shadow-[0_20px_60px_rgba(168,85,247,0.25)]">
                 {/* Hover glow */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
@@ -96,7 +111,7 @@ export default function Projects() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   {/* Image overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-gray-900 via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0e1628] dark:from-gray-900 via-transparent to-transparent opacity-60" />
 
                   {/* External link icon */}
                   <motion.div
@@ -111,7 +126,7 @@ export default function Projects() {
                 {/* Content */}
                 <div className="relative p-6">
                   {/* Title */}
-                  <h3 className="text-lg md:text-xl font-bold text-indigo-950 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  <h3 className="text-lg md:text-xl font-bold text-white dark:text-white mb-3 group-hover:text-purple-400 dark:group-hover:text-purple-400 transition-colors">
                     {project.title}
                   </h3>
 
