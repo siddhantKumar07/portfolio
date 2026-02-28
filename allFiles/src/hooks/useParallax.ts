@@ -16,7 +16,7 @@ export function useParallax(speed: number = -0.2): {
     offset: ['start end', 'end start'],
   });
 
-  const rawY = useTransform(scrollYProgress, [0, 1], ['0%', `${speed * 100}%`]);
+  const rawY = useTransform(scrollYProgress, [0, 1], [0, speed * 300]);
 
   const y = useSpring(rawY, {
     stiffness: 60,
