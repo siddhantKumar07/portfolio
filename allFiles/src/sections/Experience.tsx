@@ -7,7 +7,7 @@ const educationData = [
     {
         id: 1,
         degree: 'Master of Computer Applications (MCA)',
-        institution: 'University',
+        institution: 'Institute of Technology & Management',
         type: 'Post Graduate',
         period: '2025 - 2027',
         location: 'Gorakhpur, UP',
@@ -16,14 +16,14 @@ const educationData = [
         achievements: [
             'Advanced software development practices',
             'Research in modern web technologies',
-            'Cloud and distributed systems fundamentals',
+            'learning Devops and cloud computing',
         ],
         side: 'left',
     },
     {
         id: 2,
         degree: 'Bachelor of Computer Applications (BCA)',
-        institution: 'University',
+        institution: 'Digvijay Nath P.G College',
         type: 'Graduate',
         period: '2022 - 2025',
         location: 'Gorakhpur, UP',

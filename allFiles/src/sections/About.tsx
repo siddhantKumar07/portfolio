@@ -5,9 +5,9 @@ import { useParallax } from '@/hooks/useParallax';
 import InteractiveRobot from '@/components/InteractiveRobot';
 
 const stats = [
-  { icon: Calendar, value: '1', label: 'Years Experience', suffix: '+' },
+  { icon: Calendar, value: '', label: 'MCA Student', suffix: '' },
   { icon: Briefcase, value: '3', label: 'Projects Completed', suffix: '+' },
-  { icon: Award, value: '100', label: 'Client Satisfaction', suffix: '%' },
+  { icon: Award, value: '', label: 'Continuous Learning', suffix: '' },
 ];
 
 export default function About() {
@@ -72,19 +72,13 @@ export default function About() {
           >
             <div className="space-y-4 text-gray-300 dark:text-gray-300 leading-relaxed">
               <p>
-                I'm a Full-Stack Developer with 1 year of hands-on experience
-                building fast, scalable, and responsive web applications using
-                React.js, Node.js, Express, MongoDB, and PostgreSQL/MySQL.
-                I specialize in creating secure RESTful APIs, implementing
-                modern frontend interfaces, and managing full deployment
-                pipelines using tools like Docker and Git.
+                I'm a passionate MCA student at ITM GKP and an aspiring Full-Stack Developer with a strong interest in building modern, scalable web applications. As a fresher, I’m continuously learning and experimenting with technologies across Web Development, DevOps, and Cloud Computing.
               </p>
               <p>
-                My skill set spans both frontend and backend development, with
-                a strong focus on clean code, smooth user experiences, and
-                animation-driven UI using libraries like Framer Motion. I'm
-                passionate about solving real-world problems with practical,
-                efficient, and user-centered solutions.
+                I enjoy developing responsive web interfaces and exploring backend systems using tools like React.js, Node.js, Express, and databases such as MongoDB and MySQL. Along with development, I’m also interested in DevOps practices and cloud platforms, learning tools like Git, Docker, and deployment workflows to understand how modern applications are built and deployed.
+              </p>
+              <p>
+                My focus is on writing clean, maintainable code, improving problem-solving skills, and gaining practical experience by building real-world projects. I’m eager to grow as a developer and contribute to impactful software solutions.
               </p>
             </div>
 
